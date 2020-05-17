@@ -11,6 +11,9 @@ N=10;
 R=2;
 % array=zeros();
 W=2.5;
+L = 3;
+gamma_max = deg2rad(60);
+R = (L/tan(gamma_max)) + W/2
 % step one is determine if the point in the same row or not
 % for i=s(1:end)
 %         if abs(s(i)-s(i+1 ))==N
@@ -32,17 +35,18 @@ pts=3;
 j=0;
 for i=1:19
     if abs(s(i)-s(i+1))==N
-                XY(i,:)
-                XY(i+1,:)
+                XY(i,:);
+                XY(i+1,:);
                 startp=XY(i,:);
                 endp=XY(i+1,:);
-                [xx,yy]=fillline(startp,endp,pts);
+                [xx,yy]=fillline(1,10,10);
                 n=length(xx);
     else
         d=abs(i-(i+1));
         f=d*W;
         if f>=2*R             % if f is greater than the min then
             %             pi turn generate a way-points for the pi turn
+            
         else
             %             else omega turn and generate way-points for an omega
             
@@ -56,6 +60,7 @@ for i=1:19
     end
     j=j+k;
 end
+D
 % end
 % take starting, ending point & number of points in between
 % make line to connect between 2 coordinates
