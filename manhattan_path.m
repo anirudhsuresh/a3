@@ -6,6 +6,7 @@
 function path = manhattan_path(start, finish)
     path_count = 1;
 
+    path(1,1:2) = start;
     if start(1) < finish(1) && start(2) < finish(2)
         for i=start(2):0.2:finish(2)
            path(path_count,1:2) = [start(1),i];
