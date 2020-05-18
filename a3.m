@@ -1,6 +1,9 @@
 % function [XY,DMAT_old]=a3()
 % assignment #3
 % clc
+% function [XY,DMAT_old]=a3()
+% assignment #3
+% clc
 % clear all
 % clf 
 %initilizations
@@ -12,7 +15,7 @@ X=zeros(1,22);Y=zeros(1,22);     % vector for x and y co-ordinates of the field
 
 L = 3;
 gamma_max = deg2rad(60);
-R = (L/tan(gamma_max)) + W/2     
+R = (L/tan(gamma_max)) + W/2   ;  
 
 X(1,2)=W/2;                      % X2 is W/2 away from the axis(0,0)
 X(1,N+2)=W/2;
@@ -66,22 +69,7 @@ for i=2:2*N+1
  end 
 end 
 
-% pi and omega manuvers 
-% cost of a pi turn
-% R=3; % make sure this is correct 
-% pi_cost=d*W+(pi-2)*r_min;
-% expo=(1-(((2*r_min+d*W)^2)/8*(R^2)));
-% omega_cost=3*pi*r_min-2*r_min*acos(expo);
-
-
-% d=abs(i-j);
-% f=d*W;
-% if f>2*r_min
-%     cost=pi;
-% else 
-%     cost=omega;
-% end 
-
+% pi and omega manuvers
 % turning costs 
 for i=2:N
     for j=i+1:N+1
@@ -144,4 +132,3 @@ route = [1 resultStruct.optRoute 2*N+2]; % extract node sequence
 display(route)
 mini_dist=resultStruct.minDist;  %print computed minimum distance
 display(mini_dist)
-% end 

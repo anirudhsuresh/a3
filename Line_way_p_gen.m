@@ -1,4 +1,4 @@
-function path=fillline(start_p,end_p,pts)
+function path=Line_way_p_gen(start_p,end_p,pts)
         m=(end_p(2)-start_p(2))/(end_p(1)-start_p(1)); %gradient 
         if m==Inf %vertical line
             xx(1:pts)=start_p(1);

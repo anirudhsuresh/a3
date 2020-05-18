@@ -55,4 +55,3 @@ function path = omega_turn(r, dw, pos, direction)
     path = [path(1, 1:end)'+x_off path(2, 1:end)']
 % scatter(path(1:end,1)', path(1:end,2)', 'b');
 end
-
