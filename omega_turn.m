@@ -1,7 +1,7 @@
 % r = 3;
 % dw = 2;
 % pos = [0 0];
-% direction = 'southeast'
+% direction = 'southwest';
 
 function path = omega_turn(r, dw, pos, direction)
 
@@ -34,7 +34,7 @@ function path = omega_turn(r, dw, pos, direction)
 
     if strcmp(direction, 'northeast') == 1
         tr = trot2(0);
-        x_off = 0
+        x_off = 0;
     elseif strcmp(direction, 'northwest') == 1
         tr = trot2(0);
         x_off = -dw;
@@ -45,13 +45,13 @@ function path = omega_turn(r, dw, pos, direction)
     elseif strcmp(direction, 'southeast') == 1
         tr = trot2(pi);
         x_off = dw;
-        path = flipud(path)
+        path = flipud(path);
     end
     t = tt*tr;
 
     path = [path(1:end,1)'; path(1:end,2)'; ones(1,length(path))];
     path = fliplr(path);
     path = t*path;
-    path = [path(1, 1:end)'+x_off path(2, 1:end)']
+    path = [path(1, 1:end)'+x_off path(2, 1:end)'];
 % scatter(path(1:end,1)', path(1:end,2)', 'b');
 end

@@ -1,4 +1,5 @@
-route=[1,13,3,6,16,19,9,10,20,17,14,4,7,11,21,18,8,5,15,12,2,22];
+
+route=[1     2    12    15     5     8    18    21    11    10    20    17     7     4    14    19     9     6    16    13     3    22];
 
 global XY
 s=route(2:21);
@@ -9,10 +10,11 @@ end
 N=10;
 R=3;
 W=2.5;
-pts=5;
+pts=25;
 j=0;
 direction=0;
 n=length(s);
+figure(1); clf; hold on; axis equal;
 for i=1:n-1
     p=s(i);
     q=s(i+1);
@@ -40,13 +42,17 @@ for i=1:n-1
             end
         end
         
-        d=abs(s(i)-s(i+1));
-        dist_n=d*W;
+%         d=abs(s(i)-s(i+1));
+%         dist_n=d*W;
+
+        dist_n = abs(start_p(1) - end_p(1));
         
         if dist_n>=2*R      % if f is greater than the min then pi turns
             path= pi_turn(R, dist_n,start_p, direction);
         else                % else omega turn
-            path= omgea_turn(R, dist_n,start_p, direction);
+            path= omega_turn(R, dist_n,start_p, direction);
+            figure(1); clf; hold on; axis equal;
+            scatter(path(1:end,1)', path(1:end,2)', 'b'); 
         end
     end
     n=length(path);
@@ -55,12 +61,14 @@ for i=1:n-1
         D(j+k,2)=path(k,2);
     end
     j=j+k;
- 
+    path_exp=D;
+    plot(path_exp(:,1),path_exp(:,2))
 end
-path_exp=D;
+% path_exp=D;
 % path_m=manhattan_path(XY(s(1),:),XY(s(2),:));
 % start_path=path_m;
 % path_m=manhattan_path(XY(s(20),s(21)));
 % end_path=path_m;
- plot(path_exp(:,1),path_exp(:,2))
+% path_exp
+ 
 

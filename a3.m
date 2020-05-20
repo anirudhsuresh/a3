@@ -7,7 +7,7 @@
 % clear all
 % clf 
 %initilizations
-
+clear;figure(1); clf; hold on; axis equal;
 W=2.5;                           % implementation width(m)
 RL=20;                           % Length of field row (m)
 N=10;                            % number of rows
@@ -132,3 +132,118 @@ route = [1 resultStruct.optRoute 2*N+2]; % extract node sequence
 display(route)
 mini_dist=resultStruct.minDist;  %print computed minimum distance
 display(mini_dist)
+
+s=route;
+for i=1:21
+    co(i,1)=XY(i,1)';
+    co(i,2)=XY(i,2)';
+end
+
+N=10;
+R=3;
+W=2.5;
+pts=25;
+j=0;
+direction=0;
+n=length(s);
+
+rw = 0.5; L = 2.5;
+gamma_max = pi/4; gamma_min = -gamma_max; 
+vmax = 1; v = vmax; vmin = 0;
+tau_gamma = 0.001; tau_v= 0.001; 
+global dT;
+global DT;
+dT = 0.001; DT = 0.01; T = 25.0;
+
+pos = [XY(1,1) XY(1,2) 0];
+gamma = 0;
+
+current_pos = [pos(1) pos(2) pos(3) gamma v];
+u = [gamma v];
+umin = [gamma_min vmin];
+umax = [gamma_max vmax];
+
+delta1=0; delta2=0; slip=0;
+
+Qmin = [-Inf -Inf -Inf gamma_min -Inf];
+Qmax = [Inf Inf Inf gamma_max Inf];
+
+Ld = 3;
+count = 1;
+
+for i=1:n-1
+    p=s(i);
+    q=s(i+1);
+    start_p=XY(p,:);
+    end_p=XY(q,:);
+    
+    if i == 1 || i == n-1
+        path = manhattan_path(start_p, end_p);
+        
+    elseif abs(p-q)==N      % its a straight line
+%         start_p=XY(p,:);
+%         end_p=XY(q,:);
+        path=Line_way_p_gen(start_p,end_p,pts);
+    else                        % its a headland manuver
+        % to identify the direction of the current turn
+        
+        if p<=11 && q>=2
+            if p>q
+                direction='southwest';
+            elseif p<q
+                direction='southeast';
+            end
+        elseif p>=12 && q<=21
+            if p<q
+                direction='northeast';
+            elseif p>q
+                direction='northwest';
+            end
+        end
+        
+%         d=abs(s(i)-s(i+1));
+%         dist_n=d*W;
+
+        dist_n = abs(start_p(1) - end_p(1));
+        
+        if dist_n>=2*R      % if f is greater than the min then pi turns
+            path= pi_turn(R, dist_n,start_p, direction);
+        else                % else omega turn
+            path= omega_turn(R, dist_n,start_p, direction);
+             
+        end
+    end
+    z=length(path);
+    for k=1:z
+        D(j+k,1)=path(k,1);
+        D(j+k,2)=path(k,2);
+    end
+    j=j+k;
+    path_exp=D;
+    
+    complete = 0;
+    while complete == 0
+        [gamma, complete] = purePursuitController(current_pos, L, Ld, path);
+        u = [gamma v];
+        current_pos_next = robot_bike_dyn(current_pos, u, umin, umax, Qmin, Qmax, L, tau_gamma, tau_v, delta1, delta2, slip);   
+
+        robot_tracker(count,1:2) = current_pos(1:2);
+        count = count + 1;
+        current_pos = current_pos_next;
+    end
+    
+    scatter(path_exp(:,1),path_exp(:,2));
+   
+end
+
+build_tractor();
+
+robot_start = [pos(1) pos(2) pos(3)];
+tr = create_transform_matrix(robot_start);
+plot_tractor(tr, 'g');
+
+plot(robot_tracker(1:end,1)', robot_tracker(1:end,2)', 'k')
+robot_end = [current_pos(1) current_pos(2) current_pos(3)];
+tr = create_transform_matrix(robot_end);
+plot_tractor(tr, 'r');
+
