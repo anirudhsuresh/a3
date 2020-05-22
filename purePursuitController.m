@@ -1,4 +1,4 @@
-function [steer_angle, complete] = purePursuitController(q,  L, Ld, path)
+function [steer_angle, cross_track_error] = purePursuitController(q,  L, Ld, path)
 
 % create a transformation matrix to convert the world frame 
 % points to the tractors frame
@@ -36,15 +36,19 @@ for i=1:size(path,1)
         min_ind = i;
     end
 end
-
-complete = 0;
+   
+% calculate the cross track error
+[cte, ind] = min(d);
+cross_track_error = cte(1);
+if robot_path(ind(1),1) < 0
+    cross_track_error = -cross_track_error;
+end
 
 % calculate curvature and steer angle
 if min_ind > 0
     e = robot_path(min_ind,1:2);
 else
     e = [0 0];
-    complete = 1;
 end
 curvature = (2*e(2))/(Ld^2);
 steer_angle = atan(curvature * L);
