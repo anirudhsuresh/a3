@@ -1,4 +1,4 @@
-function [final_pose]=path_generator(T,path,start_pos,Ld)
+function [final_pose, error]=path_generator(T,path,start_pos,Ld)
 L = 3;
 gamma_max = pi/4; gamma_min = -gamma_max; 
 vmax = 1; v = vmax; vmin = 0;
@@ -45,7 +45,7 @@ build_tractor();
 figure(1); hold on; axis equal;
 
 % z = [start_pos(1) start_pos(2) start_pos(3)];
-% tr = create_transform_matrix(z);
+% tr = create_transform_matrix(z);hgb
 % plot_tractor(tr, 'g');
 
 plot(robot_tracker(1:end,1)', robot_tracker(1:end,2)', 'k')
